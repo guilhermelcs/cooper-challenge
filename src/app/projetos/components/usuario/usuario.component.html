@@ -1,1 +1,5 @@
-<p>usuario works!</p>
+<div *ngFor="let user of users">
+    <div>{{user.id}}</div>
+    <div>{{user.login}}</div>
+    <img src="{{ user.avatarUrl }}" alt="">
+</div>
