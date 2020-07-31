@@ -1,3 +1,8 @@
 export class Users {
-    constructor () {}
+    constructor(
+        private login?: string,
+        private id?: number,
+        private avatarUrl?: string,
+        private url?: string,
+    ) {}
 }
