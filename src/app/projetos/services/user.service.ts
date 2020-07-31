@@ -23,7 +23,7 @@ export class UserService {
   }
 
   listarUsuarioPorLogin(login: string): Observable<User> {
-    return this.httpClient.get<User>(this.url + '/' + login)
+    return this.httpClient.get<User>(this.url + '/' + login + '?_limit=10')
       .pipe( retry(2), catchError(this.handleError));
   }
 
