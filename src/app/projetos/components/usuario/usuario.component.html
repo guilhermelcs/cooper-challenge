@@ -1,5 +1,57 @@
-<div *ngFor="let user of users">
-    <div>{{user.id}}</div>
-    <div>{{user.login}}</div>
-    <img src="{{ user.avatarUrl }}" alt="">
+<div class="tab-container">
+    <div class="align-end">
+        <mat-form-field class="example-full-width" color="primary">
+            <mat-label>Nome do Usuário</mat-label>
+            <mat-icon matPrefix color="primary">search</mat-icon>
+            <input matInput type="email" class="form-control form-align-center" id="search-text" name="search-text" aria-describedby="search-text" 
+            [(ngModel)]="searchText" placeholder="Procurar por usuário" 
+            autofocus>
+        </mat-form-field>
+    </div>
+    <mat-tab-group mat-align-tabs="start" color="primary">
+        <mat-tab label="Usuários">
+        <div fxLayout="row wrap" fxlayoutgap="15px grid" fxLayoutAlign="start center">
+            <ng-container *ngFor="let user of users | filterPipe: searchText">
+                <mat-card fxFlex="0 1 calc(33.3% - 15px)" class="example-card" style="margin: 0.5%">
+                    <mat-card-header>
+                        <div
+                        mat-card-avatar
+                        class="example-header-image"
+                        style="background-image: url('{{ user.avatar_url }}')"
+                        ></div>
+                        <mat-card-title>{{ user.login }}</mat-card-title>
+                        <mat-card-subtitle><a class="user-link" href="https://github.com/{{ user.login }}" target="_blank">https://github.com/{{ user.login }}</a></mat-card-subtitle>
+                    </mat-card-header>
+                    
+                    <mat-card-actions class="align-end">
+                        <button mat-button class="primary-green">VER</button>
+                        <button (click)="addFavorito(user)" mat-button class="primary-green">FAVORITAR</button>
+                    </mat-card-actions>
+                </mat-card>
+            </ng-container>
+        </div>
+    </mat-tab>
+    <mat-tab label="Favoritos">
+        <div fxLayout="row wrap" fxlayoutgap="15px grid" fxLayoutAlign="start center">
+            <ng-container *ngFor="let user of favUsers | filterPipe: searchText">
+                <mat-card fxFlex="0 1 calc(33.3% - 15px)" class="example-card" style="margin: 0.5%">
+                    <mat-card-header>
+                        <div
+                        mat-card-avatar
+                        class="example-header-image"
+                        style="background-image: url('{{ user.avatar_url }}')"
+                        ></div>
+                        <mat-card-title>{{ user.login }}</mat-card-title>
+                        <mat-card-subtitle><a class="user-link" href="https://github.com/{{ user.login }}" target="_blank">https://github.com/{{ user.login }}</a></mat-card-subtitle>
+                    </mat-card-header>
+                    
+                    <mat-card-actions class="align-end">
+                        <button mat-button class="primary-green">VER</button>
+                        <button (click)="removeFavorito( user )" mat-button class="primary-green">DESFAVORITAR</button>
+                    </mat-card-actions>
+                </mat-card>
+            </ng-container>
+        </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>
