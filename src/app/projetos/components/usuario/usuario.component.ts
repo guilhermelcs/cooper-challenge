@@ -1,6 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { User } from './../../models/user.model';
 import { UserService } from './../../services/user.service';
+import { Repositorio } from './../../models/repositorio.model';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-usuario',
@@ -8,25 +12,49 @@ import { UserService } from './../../services/user.service';
   styleUrls: ['./usuario.component.scss']
 })
 export class UsuarioComponent implements OnInit {
-
   user = {} as User;
   users: User[];
 
-  constructor( private userService: UserService ) { }
+  favUsers: User[] = [];
+  searchText = '';
 
-  ngOnInit(): void {
-    this.getUsuarios();
+  constructor(
+    private http: HttpClient,
+    private userService: UserService,
+    private route: ActivatedRoute
+  )
+  {
+    this.users = new Array<User>();
   }
 
-  getUsuarios(): void {
+  ngOnInit(): void {
+    this.listarUsuarios();
+    this.favUsers = JSON.parse(localStorage.getItem('favoritos')) ? JSON.parse(localStorage.getItem('favoritos')) : [] ;
+  }
+
+  listarUsuarios(): void {
     this.userService.listarUsuarios().subscribe((usuarios: User[]) => {
       this.users = usuarios;
     });
   }
 
-  getUsuariosPorLogin( login: string ): void {
+  listarUsuariosPorLogin( login: string ): void {
     this.userService.listarUsuarioPorLogin( login ).subscribe((usuario: User) => {
       this.user = usuario;
     });
+  }
+
+  // getFavoritos(): User[] {
+  //   return this.userService.listarFavoritos();
+  // }
+
+  addFavorito( user: User ): void {
+    this.favUsers.includes(user) ? '' : this.favUsers.push(user);
+    localStorage.setItem('favoritos', JSON.stringify(this.favUsers));
+  }
+
+  removeFavorito( user: User ): void {
+    this.favUsers = this.favUsers.filter( obj => obj.id !== user.id );
+    localStorage.setItem('favoritos', JSON.stringify(this.favUsers));
   }
 }
